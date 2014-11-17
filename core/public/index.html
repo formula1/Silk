@@ -1,0 +1,44 @@
+<!Doctype html>
+<html>
+<head>
+  <link href="/css/normalize.css" rel="stylesheet" />
+  <link href="/css/generics.css" rel="stylesheet" />
+  <link href="/css/tolerable.css" rel="stylesheet" />
+  <script src="/bc/jquery" type="text/javascript" ></script>
+  <script src="/bc/vue" type="text/javascript" ></script>
+  <script type="text/javascript">
+  jQuery(function($){
+    var ms = [];
+    var choose;
+    $.ajax("/managers.json").done(function(ms){
+      console.log(ms);
+      choose = new Vue({
+        el: '#managers',
+        data: {
+          ms: ms
+        }
+      });
+    })
+  });
+  </script>
+
+
+</head>
+<body>
+  <div class="centerer">
+    <div>
+      <ul id="managers" class="inline-list">
+        <li v-repeat="ms" >
+          <div class="centerer">
+            <a class="icon" href="{{url}}">
+              <img v-attr="src: icon" />
+              <br/>
+              {{title}}
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

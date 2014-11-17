@@ -1,0 +1,10 @@
+{
+  "title": "Text Editor",
+  "url": "index.html",
+  "icon": "logo.png",
+  "listeners":{
+    "openFile":{
+      "mimetype": "^text|(json|javascript|css)$"
+    }
+  }
+}

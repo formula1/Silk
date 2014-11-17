@@ -8,14 +8,11 @@ var socket;
     socket = new WebSocket(host);
 
     socket.onopen = function () {
-
-      console.log("connected to socket");
       if (methods.queue.length > 0) {
         for (var i = 0; i < methods.queue.length; ++i) {
           if (methods.queue.hasOwnProperty(i)) {
 
             socket.send(methods.queue[i]);
-            console.log(methods.queue[i]);
           }
         }
         methods.queue = [];
@@ -107,11 +104,9 @@ methods.remove = function(id){
 methods.receive = function (message) {
   message = JSON.parse(message.data);
   if (typeof methods.sent[message.id] != "undefined") {
-    console.log("called");
     methods.sent[message.id].callback(message.error, message.data);
     delete methods.sent[message.id];
   }else if(methods.listeners[message.id] != undefined) {
-    console.log("listened");
     methods.listeners[message.id].callback(message.error, message.data);
   }
 }

@@ -20,14 +20,16 @@ var express = require('express')
 var app = express()
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '/core/public/index.html'));
 })
 
 // static files for client
 app.use(express.static(__dirname + '/core/public'));
-app.get("/bc/:component",require(__root+"/core/bower_static.js"));
 
-require(__root+"/core/appmanager")(app,wss);
+app.get("/bc/:component",require(__root+"/core/bower_static.js"));
+app.get("/nm/:module",require(__root+"/core/browserify_static.js"));
+
+require(__root+"/core/windowloader")(app,wss);
 
 var server = app.listen(3000, function () {
   var add = server.address();
