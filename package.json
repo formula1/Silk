@@ -19,6 +19,8 @@
     "bower-json-auth": "~0.1.5"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "devstart": "node core/pipedreams/selector.js",
+    "jspath": "node core/pipedreams/jspath.js"
   }
 }

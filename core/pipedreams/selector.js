@@ -26,9 +26,18 @@ For processing
 */
 
 var cheerio = require("cheerio");
+var fs = require("fs");
+var dom = cheerio.load(fs.readFileSync(__dirname+"/example.html"));
+var ws = "";
+function readOb(ob, limit,c){
+  for(var i in ob){
+    if(typeof ob[i] == "function") continue;
 
-function Selector(){
-  this.document = cheerio.load("<selector></selector>");
+    console.log(new Array(c+1).join("  ")+"("+typeof ob[i]+")"+i+": "+ob[i]);
+    if(typeof ob[i] == "object" && limit > c){
+      c++;
+      readOb(ob[i], limit,c);
+    }
+  }
 }
-
-Selector.append
+readOb(dom, 5,0);
