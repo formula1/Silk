@@ -77,7 +77,7 @@ jQuery(function ($) {
   Owner.request("reverse","adasdasda").done(function(m){
     console.log(m);
   });
-  Owner.on("reverse", function(s,next) {
+  Owner.add("reverse", function(s,next) {
       console.log("received message: "+s);
       return s.split("").reverse().join("");
   })

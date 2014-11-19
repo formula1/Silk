@@ -4,7 +4,8 @@ var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
   port: 9999
 });
-require('./methods.js');
+require(__dirname+"/core/packageloader/server_com.js");
+//require('./methods.js');
 
 
 console.log("web socket is at: " + wss.options.host + ":" + wss.options.port);

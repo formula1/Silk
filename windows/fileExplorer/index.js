@@ -20,9 +20,18 @@ function parsePath(path){
 var watchers = {};
 
 function setupWatcher(path,call_ob,next){
-  if(call_ob.id in watchers)
-    watchers[call_ob.id].close();
-  watchers[call_ob.id] = fs.watch(path, function (event, filename) {
+  if(call_ob.user.id in watchers){
+    watchers[call_ob.user.id].close();
+  }else{
+    call_ob.user.on("disconnect", function(){
+      closeWatcher(call_ob.user);
+      delete watchers[call_ob.user.is];
+    });
+    call_ob.user.on("headless", function(){
+      closeWatcher(call_ob.user);
+    });
+  }
+  watchers[call_ob.user.id] = fs.watch(path, function (event, filename) {
     console.log('event is: ' + event);
     if (filename) {
       console.log('filename provided: ' + filename);
@@ -31,17 +40,17 @@ function setupWatcher(path,call_ob,next){
     }
     next(void(0),parsePath(path));
   });
-  call_ob.ws.on("close", function(){
+
+  function closeWatcher(user){
     try{
-    watchers[call_ob.id].close();
-    delete watchers[call_ob.id];
+    watchers[user.id].close();
     }
     catch(e){
       console.log(e);
-      console.log(call_ob.id);
-      console.log(watchers[call_ob.id]);
+      console.log(user.id);
+      console.log(watchers[user.id]);
     }
-  })
+  }
 }
 
 methods.add({

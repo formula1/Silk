@@ -11,7 +11,7 @@ function WinAbs(context){
 
 WinAbs.prototype.open = function(context,cb){
   if(typeof context === "undefined")
-     throw new Error("to construct "+aruments.callee.name+" You need to provide a window");
+     throw new Error("to construct "+arguments.callee.name+" You need to provide a window");
   this.context = context;
 
   var that = this;
@@ -97,7 +97,7 @@ WinAbs.prototype.send = function(namespace,message){
   return this;
 }
 
-WinAbs.prototype.on = function(namespace,cb){
+WinAbs.prototype.add = function(namespace,cb){
   var def;
   if(typeof cb === "undefined"){
     var that = this;

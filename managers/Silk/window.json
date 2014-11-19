@@ -1,5 +1,5 @@
 {
   "title": "Silk",
-  "url": "http://0.0.0.0:3000/Silk/index.html",
-  "icon": "fileExplorer/logo.png"
+  "url": "http://localhost:3000/wm/Silk/index.html",
+  "icon": "logo.png"
 }

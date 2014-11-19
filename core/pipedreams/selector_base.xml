@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!-- I need to think in box model... -->
+<root>
+  <server>
+    <connected_users>
+      <user alias="Anything" type="remote|local" >
+        <server_authority authorized="true|false"></server_athority>
+        <servers_connected_to>
+        </servers_connected_to>
+        <users_connected_to>
+          <user>
+            <initiator_application></initiator_application>
+          </user>
+        </users_connected_to>
+        <apps_open>
+          <application state="headless|minimized|focus">
+            <users_connected_by_this>
+            </users_connected_by_this>
+          </application>
+        </apps_open>
+      </user>
+    </connected_users>
+    <applications>
+      <application type="manager|editor|viewer|communicaion|auxillary">
+        <icon></icon>
+        <main></main>
+        <dependencies>
+          <npm></npm>
+          <bower></bower>
+        </dependencies>
+        <server_contructor></server_constructor>
+        <Active_Users>
+        </Active_Users>
+      </application>
+    </applications>
+    <servers_connected_to>
+      <server>
+        <url></url>
+      </server>
+    </servers_connected_to>
+  </server>
+</root>
