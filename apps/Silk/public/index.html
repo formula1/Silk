@@ -20,26 +20,12 @@
 
       <iframe v-if="running" class="content" v-on="load: buildChannel(this)"   data-name="{{title}}" src="{{url}}"></iframe>
     </div>
-    <!--
-    <div class="window">
-      <div class="title">File Explorer</div>
-      <iframe class="content" src="/fileExplorer/index.html"></iframe>
-    </div>
--->
   </div>
 
   <div id="taskbar">
     <div class="app" v-repeat="windows" v-on="click: open(this)">
       <img v-attr="src: icon">
-
     </div>
-    <!--
-    <div class="app open" data-open="false" data-min="false" data-url="http://jw.org">
-      <img src="textEditor/logo.png">
-    </div>
-<div class="app" data-open="true" data-min="false" data-url="http://0.0.0.0:3000/fileExplorer/index.html">
-      <img src="fileExplorer/logo.png" </div>
--->
   </div>
 
   <!-- Scripts -->
@@ -54,7 +40,7 @@
   <script src="/requestinterface/windowabs.js"></script>
   <script src="/js/windowManager.js"></script>
   <script src="/js/FrameContext.js"></script>
-  <script src="/js/call.js"></script>
+  <script src="/js/Window2Server_com.js"></script>
 
   <!-- Our Files -->
   <script src="js/windowOrderer.js"></script>

@@ -1,21 +1,7 @@
 global.__root = __dirname;
 var path = require('path');
-var WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer({
-  port: 9999
-});
-require(__dirname+"/core/packageloader/server_com.js");
-//require('./methods.js');
 
-
-console.log("web socket is at: " + wss.options.host + ":" + wss.options.port);
-
-wss.on('connection', function (ws) {
-  ws.on('message', function (message) {
-    console.log("websocket message: " + message);
-    methods.call(ws,message);
-  });
-});
+require(__root+"/core/Client2Server_com.js");
 
 var express = require('express')
 var app = express()
@@ -27,10 +13,7 @@ app.get('/', function (req, res) {
 // static files for client
 app.use(express.static(__dirname + '/core/public'));
 
-app.get("/bc/:component",require(__root+"/core/bower_static.js"));
-app.get("/nm/:module",require(__root+"/core/browserify_static.js"));
-
-require(__root+"/core/windowloader")(app,wss);
+var windows = require(__root + "/core")(app);
 
 var server = app.listen(3000, function () {
   var add = server.address();

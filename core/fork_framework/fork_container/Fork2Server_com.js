@@ -1,16 +1,14 @@
 /*
   Similar to meteor.methods
 */
-
 console.log("in the child");
-
-var User = require(__dirname+"/user.js");
 
 function MethodCall(message){
   this.id = message.id;
-  this.user = message.user;
+  this.ws = message.ws;
   this.name = message.name;
   this.data = message.data;
+  this.exec();
 }
 
 MethodCall.prototype.exec = function(){
@@ -24,24 +22,25 @@ MethodCall.prototype.exec = function(){
   }catch(e){
     return this.sendErr(e)
   }
-  if(typeof result != "undefined")
+  if(result != "undefined")
     this.sendResult(result);
 }
 
 MethodCall.prototype.sendErr = function (e){
-  console.log(e.stack);
-  var ms = JSON.parse(JSON.stringify(this));
-  ms.error = e;
-  ms.data = null;
-  ms.user = ms.user.id;
-  process.send({cmd:"send",message:ms});
+  process.send({cmd:"send",message:{
+    id: this.id,
+    ws: this.ws.id,
+    error: e.toString(),
+    data: null
+  }});
 }
 MethodCall.prototype.sendResult = function (result){
-  var ms = JSON.parse(JSON.stringify(this));
-  ms.error = null;
-  ms.data = result;
-  ms.user = ms.user.id;
-  process.send({cmd:"send",message:ms});
+  process.send({cmd:"send",message:{
+    id: this.id,
+    ws: this.ws.id,
+    error: null,
+    data: result,
+  }});
 }
 
 
@@ -51,18 +50,31 @@ var methods = {};
 methods.list = {};
 methods.users = {};
 
+
 // function to add method to methods.list
 methods.add = function (array) {
+
   for (var method in array) {
-    process.send({cmd:"add",name:method});
     methods.list[method] = array[method];
+    process.send({cmd:"add",name:method});
   }
+
 }
 
+// execute method when called by client
+methods.call = function(ws,message){
+  try{
+    var meth = new MethodCall(ws,message);
+  }catch(e){
+    return console.log("error: "+e+", message: "+ JSON.stringify(message));
+  }
+  meth.exec();
+}
+var User = require(__dirname+"/ws_puppet.js");
 process.on("message",function(message){
-  if(!(message.user in methods.users))
-    methods.users[message.user] = new User(message.user);
-  message.user  = methods.users[message.user];
+  if(!(message.ws in methods.users))
+    methods.users[message.ws] = new User(message.ws);
+  message.ws  = methods.users[message.ws];
   /*
   Commands:
     disconnect: Head is closed
@@ -73,16 +85,20 @@ process.on("message",function(message){
     return meth.exec();
   }
   switch(message.cmd){
-    case "disconnect": message.user.emit("disconnect"); break;
+    case "disconnect": message.ws.emit("close"); break;
     case "close": break; //expected to close, will close forcfully in 5 seconds
     case "sleep": break; //Head is removed from the window manager so updates are impossible
     case "minimize": break; //Head is not removed but updates to the head will not be seen
 
   }
 });
-// execute method when called by client
 
 // make global because it will be used in most files.
 global.methods = methods;
 
-require(process.env.start);
+
+process.nextTick(function(){
+  require(process.env.start);
+})
+
+process.send({cmd:"ready"});

@@ -135,3 +135,9 @@ WinAbs.prototype.add = function(namespace,cb){
 WinAbs.prototype.off = function(){
   throw new Error("complain to jschannel")
 }
+
+if(window.parent && window.parent != window){
+  window.Manager = new WinAbs(window.parent);
+  if(window.top != window.parent)
+    window.RootManager = new WinAbs(window.top);
+}

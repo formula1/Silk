@@ -1,29 +1,21 @@
 
-function WindowManager(stop){
+function WindowManager(configs){
   EventEmitter.call(this);
   this.configs = [];
   this.windows = {};
-
-  if(stop) return this;
-  this.initialize();
+  if(configs)
+    this.initialize(configs);
 }
 WindowManager.prototype = Object.create(EventEmitter.prototype);
 WindowManager.prototype.constructor = WindowManager;
 WindowManager.prototype.on = EventEmitter.prototype.addListener;
 WindowManager.prototype.off = EventEmitter.prototype.removeListener;
 
-WindowManager.prototype.initialize = function(){
-  var that = this;
-  $.ajax("/windows.json").done(function(configs){
-    configs.forEach(function(config){
-      that.registerWindow(config);
-    });
-    that.emit("load");
-  })
+WindowManager.prototype.load = function(configs){
+  configs.forEach(this.registerWindow.bind(this));
+  this.emit("load");
   return this;
 }
-
-
 
 WindowManager.prototype.registerWindow = function(config){
   if(!(config instanceof FrameContext))
@@ -32,6 +24,7 @@ WindowManager.prototype.registerWindow = function(config){
   this.windows[config.id] = win;
   this.configs.push(config);
   this.emit("registered", win);
+  return this;
 }
 
 WindowManager.prototype.openFile = function(source,file){

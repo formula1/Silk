@@ -2,7 +2,9 @@ var VueManager;
 $(document).ready(function () {
   console.log("init");
   VueManager = new WindowManager();
-  console.log("done");
+  DocumentHost
+    .get("applications",{jspath:'.{.category !== "manager" || !.category}'})
+    .done(VueManager.load.bind(VueManager))
   VueManager.on("preBuild", function(winconfig){
     winconfig.id = winconfig.title;
     winconfig.running = false;

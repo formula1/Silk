@@ -1,5 +1,5 @@
 var mime = require("mime");
-
+console.log("here");
 methods.add({
   "te/open": function(file, callObj, send){
     var fs = require("fs");

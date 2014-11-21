@@ -1,5 +1,6 @@
 var fs = require('fs');
 var mime = require("mime")
+console.log("here");
 
 
 function parsePath(path){

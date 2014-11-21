@@ -9,8 +9,5 @@ util.inherits(User,events.EventEmitter);
 
 //This method is to deliver cute notifications without the use feeling overwhelmed
 //Generally used when head is sleeping
-User.prototype.notify = function(){
-
-}
 
 module.exports = User;
