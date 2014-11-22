@@ -42,7 +42,6 @@ module.exports = function(app,wss){
     } finally{
       ClientEmitter.emit(message.id,message);
     }
-
   })
 
   app.get("/filesniffer",function(req,res,next){

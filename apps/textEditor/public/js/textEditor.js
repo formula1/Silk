@@ -1,6 +1,6 @@
 var cfile = {};
 jQuery(function(){
-  Owner.add("openFile", function(file,next){
+  Manager.add("openFile", function(file,next){
     console.log("opening");
     if (file.path == null) {
        $("#notifications").html("Please open a file using File Explorer");

@@ -95,8 +95,11 @@ Server.prototype.pipe = function(name, callback){
   var p = this.messageFactory("pipe", name, callback);
   while(args.length > 0)
     p.send(args.shift());
-  ret.inherit(p);
-  return ret;
+  if(ret){
+    ret.inherit(p);
+    return ret;
+  }
+  return p;
 }
 
 Server.prototype.unpipe = function(ob){

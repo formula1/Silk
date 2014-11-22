@@ -5,7 +5,7 @@ console.log("in the child");
 
 function MethodCall(message){
   this.id = message.id;
-  this.ws = message.ws;
+  this.user = message.user;
   this.name = message.name;
   this.data = message.data;
   this.exec();
@@ -29,7 +29,7 @@ MethodCall.prototype.exec = function(){
 MethodCall.prototype.sendErr = function (e){
   process.send({cmd:"send",message:{
     id: this.id,
-    ws: this.ws.id,
+    user: this.user.id,
     error: e.stack,
     data: null
   }});
@@ -37,7 +37,7 @@ MethodCall.prototype.sendErr = function (e){
 MethodCall.prototype.sendResult = function (result){
   process.send({cmd:"send",message:{
     id: this.id,
-    ws: this.ws.id,
+    user: this.user.id,
     error: null,
     data: result,
   }});
@@ -62,20 +62,20 @@ methods.add = function (array) {
 }
 
 // execute method when called by client
-methods.call = function(ws,message){
+methods.call = function(user,message){
   try{
-    var meth = new MethodCall(ws,message);
+    var meth = new MethodCall(user,message);
   }catch(e){
     return console.log("error: "+e+", message: "+ JSON.stringify(message));
   }
   meth.exec();
 }
-var User = require(__dirname+"/ws_puppet.js");
+var User = require(__dirname+"/user_puppet.js");
 process.on("message",function(message){
-  console.log(message.ws);
-  if(!(message.ws in methods.users))
-    methods.users[message.ws] = new User(message.ws);
-  message.ws  = methods.users[message.ws];
+  console.log(message.user);
+  if(!(message.user in methods.users))
+    methods.users[message.user] = new User(message.user);
+  message.user  = methods.users[message.user];
   /*
   Commands:
     disconnect: Head is closed
@@ -86,7 +86,7 @@ process.on("message",function(message){
     return meth.exec();
   }
   switch(message.cmd){
-    case "disconnect": message.ws.emit("close"); break;
+    case "disconnect": message.user.emit("close"); break;
     case "close": break; //expected to close, will close forcfully in 5 seconds
     case "sleep": break; //Head is removed from the window manager so updates are impossible
     case "minimize": break; //Head is not removed but updates to the head will not be seen

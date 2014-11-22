@@ -6,11 +6,15 @@
   <link href="/css/tolerable.css" rel="stylesheet" />
   <script src="/bc/jquery" type="text/javascript" ></script>
   <script src="/bc/vue" type="text/javascript" ></script>
+  <script src="/js/Window2Server_com.js" type="text/javascript" ></script>
   <script type="text/javascript">
   jQuery(function($){
     var ms = [];
     var choose;
-    $.ajax("/managers.json").done(function(ms){
+    DocumentHost.get(
+      "applications",
+      {jspath:".{.category === \"manager\"}"}
+    ).done(function(ms){
       console.log(ms);
       console.log(ms);
       choose = new Vue({

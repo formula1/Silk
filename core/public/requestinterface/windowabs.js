@@ -40,7 +40,7 @@ WinAbs.prototype.ready = function(){
     this.channel.notify(this.notifyqueue.shift());
 }
 
-WinAbs.prototype.request = function(namespace,message,cb){
+WinAbs.prototype.get = function(namespace,message,cb){
   console.log("request made");
   if(window != window.top){
     console.log("THIS IS NOT THE TOP");

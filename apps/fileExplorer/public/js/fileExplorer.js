@@ -16,10 +16,7 @@ function file_explorer(elem) {
   // open file when clicked
   jQuery(this.elem).on("click", ".files .file a", function (e) {
     e.preventDefault();
-    Owner.send("openFile",{
-      path:$(this).attr("href"),
-      mime:$(this).parent().attr("data-mime")
-    });
+    Silk.openFile($(this).attr("href"),$(this).parent().attr("data-mime"));
    // alert("You're going to have to setup a default view for mimetype: " + $(this).parent().attr("data-mime"));
   })
   this.listener = methods.listen("fe/list/path", function (err, list) {
@@ -74,10 +71,10 @@ file_explorer.prototype.processList = function (href, list) {
 jQuery(function ($) {
 
   var fe = new file_explorer();
-  Owner.request("reverse","adasdasda").done(function(m){
+  Manager.get("reverse","adasdasda").done(function(m){
     console.log(m);
   });
-  Owner.add("reverse", function(s,next) {
+  Manager.add("reverse", function(s,next) {
       console.log("received message: "+s);
       return s.split("").reverse().join("");
   })
