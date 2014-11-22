@@ -10,8 +10,9 @@ var wss = new WebSocketServer({
 console.log("web socket is at: " + wss.options.host + ":" + wss.options.port);
 
 var ClientEmitter = new EventEmitter();
-
+var id = 0;
 wss.on('connection', function (ws) {
+  ws.id = id++;
   ClientEmitter.emit("connection",ws);
   ws.on('close',function(){
     ClientEmitter.emit("user:disconnection",ws);
@@ -27,6 +28,7 @@ wss.on('connection', function (ws) {
       console.log("typeof: "+typeof message);
       ws.close();
     }
+    console.log("Message: "+message);
     if(ClientEmitter.listeners(message.name).length == 0){
       return ws.send(JSON.stringify({
         id:message.id,
@@ -42,12 +44,16 @@ wss.on('connection', function (ws) {
           ws.send(JSON.stringify(message));
         });
         break;
-      case "open":
-        ClientEmitter.on(message.id,function(message){
+      case "pipe":
+        var fn = function(message){
           ws.send(JSON.stringify(message));
+        }
+        ClientEmitter.on(message.id,fn);
+        ws.on('close',function(){
+          ClientEmitter.removeListener(message.id,fn);
         });
         break;
-      case "close":
+      case "unpipe":
         ClientEmitter.removeAllListeners(message.id);
         break;
       default:

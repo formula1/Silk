@@ -30,7 +30,7 @@ MethodCall.prototype.sendErr = function (e){
   process.send({cmd:"send",message:{
     id: this.id,
     ws: this.ws.id,
-    error: e.toString(),
+    error: e.stack,
     data: null
   }});
 }
@@ -72,6 +72,7 @@ methods.call = function(ws,message){
 }
 var User = require(__dirname+"/ws_puppet.js");
 process.on("message",function(message){
+  console.log(message.ws);
   if(!(message.ws in methods.users))
     methods.users[message.ws] = new User(message.ws);
   message.ws  = methods.users[message.ws];

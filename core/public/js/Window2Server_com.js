@@ -7,7 +7,6 @@ function Server(host,port){
   this.listeners = {};
   try {
     this.host = "ws://"+host+":"+port;
-    console.log(this.host);
     this.socket = new WebSocket(this.host);
     this.socket.onopen = this.onOpen.bind(this);
     this.socket.onmessage = this.onMessage.bind(this);
@@ -18,15 +17,15 @@ function Server(host,port){
 }
 
 Server.prototype.onOpen = function(){
+  console.log(this.queue.length);
   while(this.queue.length > 0){
     this.socket.send(this.queue.shift());
   }
+  console.log("Server is Open");
 }
 
 Server.prototype.onMessage = function (message) {
-  console.log(message);
   message = JSON.parse(message.data);
-  console.log(message);
   if (typeof this.sent[message.id] == "undefined")
     throw new Error("non Existant Message");
   this.sent[message.id].callback(message.error, message.data);
@@ -79,7 +78,7 @@ Server.prototype.get = function (name, data, cb) {
     }
   }
   this.messageFactory("request", name, cb).send(data);
-  return (ret)?ret.promise():this;
+  return (ret)?ret:this;
 }
 
 Server.prototype.pipe = function(name, callback){
@@ -90,20 +89,14 @@ Server.prototype.pipe = function(name, callback){
     callback = args.pop();
     name = args.shift();
   }else if(arguments.length == 1){
-    ret = jQuery.Deferred();
-    callback = function(err,message){
-      if(err) return ret.fail(err)
-      ret.resolve(message)
-    }
+    ret = new StreamPromise();
+    callback = ret._write.bind(ret);
   }
-  var p = this.messageFacotry("pipe", name);
+  var p = this.messageFactory("pipe", name, callback);
   while(args.length > 0)
     p.send(args.shift());
-  var pr = ret.promise();
-  for(var i in p){
-    pr[i] = p[i];
-  }
-  return pr;
+  ret.inherit(p);
+  return ret;
 }
 
 Server.prototype.unpipe = function(ob){
@@ -115,11 +108,8 @@ Server.prototype.unpipe = function(ob){
   delete this.sent[ob.id];
   return this;
 }
-var DocumentHost;
+window.DocumentHost = null;
 (function(url){
-  console.log(url);
-
   url = /^http(s?):\/\/([0-9\.]+|[a-z\-.]+)((?::)[0-9]+)?(.*)$/.exec(url);
-  console.log(url);
-  DocumentHost = new Server(url[2],url[3].substring(1));
+  window.DocumentHost = new Server(url[2],url[3].substring(1));
 })(document.URL)

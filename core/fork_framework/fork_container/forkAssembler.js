@@ -22,7 +22,6 @@ function forkAssembler(folder,urlpath,file,next){
     forkListens
   ],function(err,result){
     console.log(err);
-    console.log(result);
     if(err) return next(err);
     next(void(0),result)
   })
@@ -127,21 +126,21 @@ function checkBowerDeps (j,next){
     j.bower_info = {already_install:[],new_install:[],all:[]};
     return next(void(0),j);
   }
-  var bowerJson = require('bower-json');
+  var bowerJson = require('bower-json-auth');
   var ai = [];
   var ni = [];
   async.each(Object.keys(j.bower_dependencies),function(dep,next){
-    bowerJSON.read(__root+"/bower_components/"+dep,function(err,json){
-      if(err) return next(err);
+    bowerJson.read(__root+"/bower_components/"+dep,function(err,json){
       if(json){
          ai.push(dep)
          return next(void(0),dep);
       }
       child_process.exec(
-      "bower install "+dep+"@"+j.bower_dependencies[dep],
+      "bower install "+dep+"#"+j.bower_dependencies[dep],
       {cwd:__root}, function(err,stout,sterr){
         if(err) return next(err);
-        bowerJSON.read(__root+"/bower_components/"+dep,function(err,file){
+        console.log(stout);
+        bowerJson.read(__root+"/bower_components/"+dep,function(err,file){
           if(err) return next(err);
           ni.push(dep);
           return next(void(0),dep);
@@ -160,9 +159,13 @@ function createFork (j,next){
     require.resolve(j.path);
     try{
       var fork = child_process.fork(
-        __dirname+"/Fork2Server_com.js",[],
-        {cwd:__root,env:{start:j.path}}
-      );
+        __dirname+"/Fork2Server_com.js",[],{
+          cwd:__root,
+        env:{
+          start:j.path,
+          TERM:process.env.TERM
+        }
+      });
       j.fork = fork;
       var timeout = setTimeout(function(){
         fork.removeAllListeners();
@@ -201,7 +204,6 @@ function forkListens(j,next){
   var fork = j.fork;
   j.listeners = {};
   fork.on("message", function(m){
-    console.log(JSON.stringify(m));
     switch(m.cmd){
       case "send": ClientEmitter.emit(m.message.id,m.message);break;
       case "add":
@@ -216,7 +218,7 @@ function forkListens(j,next){
   });
   fork.on("close",function(code,signal){
     for(var i in j.listeners){
-      C2S.removeListener(i,j.listeners[i]);
+      ClientEmitter.removeListener(i,j.listeners[i]);
     }
     delete j.listeners;
     ClientEmitter.emit("fork:disconnect",fork);

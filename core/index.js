@@ -4,9 +4,11 @@ var filesniff = require(__dirname+"/utils/filesniffer");
 var windows;
 var jspath = require(__dirname+"/utils/jspath-chain");
 
+
+
 module.exports = function(app,wss){
-  app.get("/bc/:component",require(__root+"/core/bower_static.js"));
-  app.get("/nm/:module",require(__root+"/core/browserify_static.js"));
+  app.get(/^\/bc\/.*/,require(__root+"/core/bower_static.js"));
+  app.get(/^\/nm\/.*/,require(__root+"/core/browserify_static.js"));
 
   windows = new AF(__root+"/apps/","/",app);
   windows.on("finishedCompiling", function(results){

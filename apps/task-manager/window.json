@@ -1,0 +1,10 @@
+{
+  "title": "Task Manager",
+  "category": "shell",
+  "url": "index.html",
+  "icon": "icon.png",
+  "bower_dependencies":{
+    "tablesaw":"latest",
+    "jquery":"latest"
+  }
+}
