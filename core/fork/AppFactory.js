@@ -49,12 +49,14 @@ AppFactory.prototype.compileFolder = function(app){
   var that = this;
   fs.readdir(this.folder, function(err,files){
     async.filterSeries(files,function(file,next){
+      console.log("checks on application: "+file);
       forkAssembler(that.folder,that.urlpath,file,function(err,j){
         if(err){
           console.log(file+" could not be loaded")
           console.log(err.stack);
           return next(false)
         }
+        console.log("successfully compiled: "+j.name);
         that.emit("compiledSingle",j)
         next(true)
       })

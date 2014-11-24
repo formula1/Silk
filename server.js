@@ -1,7 +1,7 @@
 global.__root = __dirname;
 var path = require('path');
 
-require(__root+"/core/Client2Server_com.js");
+require(__root+"/core/Server2Client_com.js");
 
 var express = require('express')
 var app = express()

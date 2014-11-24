@@ -6,7 +6,7 @@ global.__root = path.resolve(__dirname,"../../../");
 */
 console.log("in the child");
 
-var MessageObject = require(__root+"/core/public/requestinterface/MessageObject.js");
+var MessageObject = require(__root+"/core/abstract/MessageObject.js");
 
 var methods = {};
 

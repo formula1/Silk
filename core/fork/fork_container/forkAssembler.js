@@ -28,6 +28,7 @@ function forkAssembler(folder,urlpath,file,next){
 module.exports = forkAssembler;
 
 function checkWindowJSON (folder,urlpath,file,next){
+  console.log("checking window.json for: "+file);
   var f = folder;
   fs.exists(f+file+"/window.json",function(boo){
     if(!boo)
@@ -56,6 +57,8 @@ function checkWindowJSON (folder,urlpath,file,next){
 }
 
 function checkURIs (j,next){
+  console.log("checking uris for: "+j.name);
+
   if(j.url === "headless") return next(void(0),j);
   async.each(windowuri,function(ns,next){
     j[ns] = url.resolve("http://localhost:3000"+j.tempurl+"/index.html",j[ns]);
@@ -85,6 +88,7 @@ function checkURIs (j,next){
 };
 
 function checkNPMDeps (j,next){
+  console.log("checking npm dependencies for: "+j.name);
   if(!j.npm_dependencies){
     j.npm_dependencies = {};
     j.npm_info = {already_install:[],new_install:[],all:[]};
@@ -120,6 +124,7 @@ function checkNPMDeps (j,next){
 };
 
 function checkBowerDeps (j,next){
+  console.log("checking bower dependencies for: "+j.name);
   if(!j.bower_dependencies){
     j.bower_dependencies = {};
     j.bower_info = {already_install:[],new_install:[],all:[]};
@@ -154,6 +159,7 @@ function checkBowerDeps (j,next){
 }
 
 function createFork (j,next){
+  console.log("creating fork: "+j.name);
   try{
     require.resolve(j.path);
     try{
@@ -200,6 +206,7 @@ function createFork (j,next){
 
 function forkListens(j,next){
   if(!j.fork) return next(void(0),j);
+  console.log("adding listeners to fork: "+j.name);
   var fork = j.fork;
   j.listeners = {};
   fork.on("message", function(m){

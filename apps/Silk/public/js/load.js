@@ -24,7 +24,6 @@ $(document).ready(function () {
   })
   VueManager.on("openFile", function(sniffed,candidates,originator){
     if(!("Text Editor" in candidates)){
-      alert("WHERES THE TEXT EDITOR?!");
       throw Error("issues : /");
     }
     var te = candidates["Text Editor"];
