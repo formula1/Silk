@@ -1,55 +1,18 @@
+var path = require("path");
+
+global.__root = path.resolve(__dirname,"../../../");
 /*
   Similar to meteor.methods
 */
 console.log("in the child");
 
-function MethodCall(message){
-  this.id = message.id;
-  this.user = message.user;
-  this.name = message.name;
-  this.data = message.data;
-  this.exec();
-}
-
-MethodCall.prototype.exec = function(){
-  var that = this;
-  try{
-    var result = methods.list[this.name](this.data,this,function(e,result){
-      if(e) return that.sendErr(e);
-      if(result) return that.sendResult(result);
-      console.log("no error, no result");
-    });
-  }catch(e){
-    return this.sendErr(e)
-  }
-  if(result != "undefined")
-    this.sendResult(result);
-}
-
-MethodCall.prototype.sendErr = function (e){
-  process.send({cmd:"send",message:{
-    id: this.id,
-    user: this.user.id,
-    error: e.stack,
-    data: null
-  }});
-}
-MethodCall.prototype.sendResult = function (result){
-  process.send({cmd:"send",message:{
-    id: this.id,
-    user: this.user.id,
-    error: null,
-    data: result,
-  }});
-}
-
+var MessageObject = require(__root+"/core/public/requestinterface/MessageObject.js");
 
 var methods = {};
 
 // object of all methods
 methods.list = {};
 methods.users = {};
-
 
 // function to add method to methods.list
 methods.add = function (array) {
@@ -61,30 +24,23 @@ methods.add = function (array) {
 
 }
 
-// execute method when called by client
-methods.call = function(user,message){
-  try{
-    var meth = new MethodCall(user,message);
-  }catch(e){
-    return console.log("error: "+e+", message: "+ JSON.stringify(message));
-  }
-  meth.exec();
-}
 var User = require(__dirname+"/user_puppet.js");
 process.on("message",function(message){
-  console.log(message.user);
   if(!(message.user in methods.users))
     methods.users[message.user] = new User(message.user);
   message.user  = methods.users[message.user];
+  if(!(message.name in methods.list))
+    return console.log("methods list does not have "+message.name)
+  if(!("cmd" in message)){
+    var meth = new MessageObject(message, methods.list[message.name], function(message){
+      process.send({cmd:"send",message:message});
+    });
+  }
   /*
   Commands:
     disconnect: Head is closed
 
   */
-  if(!("cmd" in message)){
-    var meth = new MethodCall(message);
-    return meth.exec();
-  }
   switch(message.cmd){
     case "disconnect": message.user.emit("close"); break;
     case "close": break; //expected to close, will close forcfully in 5 seconds

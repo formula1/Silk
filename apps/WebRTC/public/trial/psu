@@ -1,0 +1,33 @@
+OriginalUser connects to the Network
+  -Sends the application thats sending
+  -Sends the document URL
+  -Sends information about what the application will expose
+  -Information that the application wants to send
+
+Network Adds User to Its **Pool**
+
+A-Network returns them a list of AvailableUser(s)
+B-Network Finds an AvailableUser(s) For them
+
+A - OriginalUser Chooses 1 or More AvailableUser
+  -forEach as ChosenUser
+    -User Sends an Offer
+    -ChosenUser sends accept or denial (depending on application)
+      -Acceptance - Handshakes, Stun -> C
+      -Denial - Nothing
+
+B - Network Chooses 1 or More AvailableUsers
+  -forEach as ChosenUser
+    -Network picks between ChosenUser and OriginalUser to Be OffererUser and AcceptUser
+    -Network orders OffererUser to send Offer, Network orders AcceptUser to prepare
+    -OffererUser Sends Offer
+    -AcceptUser sends Accept
+    -Handshakes, stun -> C
+
+
+C - Users can Add Events to Listen to
+  - Trigger an event
+  - Get data from one another
+  - Open a Pipe
+
+They choose or the application chooses for them who to connect to

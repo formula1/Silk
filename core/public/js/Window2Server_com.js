@@ -1,6 +1,5 @@
 // connect to socket
 function Server(host,port){
-  port = 9999;
   this.queue = [];
   // method calls that are sent and waiting an answer
   this.sent = {};
@@ -62,7 +61,7 @@ Server.prototype.messageFactory = function(type,name,callback){
   return this.sent[id];
 }
 
-Server.prototype.emit = function(name,data){
+Server.prototype.trigger = function(name,data){
   Server.messageFactory("event",name,data);
 }
 
@@ -114,5 +113,5 @@ Server.prototype.unpipe = function(ob){
 window.DocumentHost = null;
 (function(url){
   url = /^http(s?):\/\/([0-9\.]+|[a-z\-.]+)((?::)[0-9]+)?(.*)$/.exec(url);
-  window.DocumentHost = new Server(url[2],url[3].substring(1));
+  window.DocumentHost = new Server(url[2],9999);
 })(document.URL)

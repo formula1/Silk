@@ -21,7 +21,6 @@ function forkAssembler(folder,urlpath,file,next){
     createFork,
     forkListens
   ],function(err,result){
-    console.log(err);
     if(err) return next(err);
     next(void(0),result)
   })

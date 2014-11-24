@@ -52,7 +52,7 @@ AppFactory.prototype.compileFolder = function(app){
       forkAssembler(that.folder,that.urlpath,file,function(err,j){
         if(err){
           console.log(file+" could not be loaded")
-          console.log(err);
+          console.log(err.stack);
           return next(false)
         }
         that.emit("compiledSingle",j)
