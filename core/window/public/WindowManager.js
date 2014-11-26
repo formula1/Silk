@@ -4,7 +4,7 @@ function WindowManager(configs){
   this.configs = [];
   this.windows = {};
   if(configs)
-    this.initialize(configs);
+    setTimeout(this.initialize.bind(this,configs),10);
 }
 WindowManager.prototype = Object.create(EventEmitter.prototype);
 WindowManager.prototype.constructor = WindowManager;

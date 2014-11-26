@@ -1,16 +1,25 @@
+var doAsync;
 if(typeof module != "undefined"){
 	var RSVP = require("rsvp");
 	var StreamPromise = require(__dirname+"/StreamPromise.js");
 	var EventEmitter = require("events").EventEmitter;
-
+	doAsync = process.nextTick.bind(process);
+}else{
+	doAsync = function(fn){
+		setTimeout(fn,1);
+	};
 }
 
 function MessageWriter(sendfn){
   EventEmitter.call(this);
   this.on = this.addListener.bind(this);
   this.off = this.removeListener.bind(this);
+	if(typeof this.getListeners == "undefined"){
+		this.getListeners = this.listeners.bind(this);
+	}
 	this.sendfn = sendfn;
   this.queue = [];
+	this.ready = false;
   // method calls that are sent and waiting an answer
 }
 
@@ -23,15 +32,19 @@ MessageWriter.prototype.onClose = function () {
 }
 
 MessageWriter.prototype.onReady = function(){
+	this.ready = true;
   while(this.queue.length > 0){
     this.sendfn(this.queue.shift());
   }
 }
 
-MessageWriter.prototype.onReturn = function (message) {
-  message = JSON.parse(message);
+MessageWriter.prototype.onNotReady = function(){
+	this.ready = false;
+}
+
+MessageWriter.prototype.returnMessage = function (message) {
 	console.log(message)
-  if (this.listeners(message.id).length == 0)
+  if (this.getListeners(message.id).length == 0)
     throw new Error("non Existant Message");
   this.emit(message.id, message.error,message.data);
 }
@@ -48,7 +61,7 @@ MessageWriter.prototype.get = function (name, data, cb) {
   var ret;
   if(typeof cb == "undefined"){
     ret = RSVP.defer();
-		ret.done = ret.promise.then.bind(ret.promise);
+		ret.promise.done = ret.promise.then.bind(ret.promise);
     cb = function(err, message){
       if(err) return ret.reject(err);
       ret.resolve(message);
@@ -73,7 +86,7 @@ MessageWriter.prototype.pipe = function(name, callback){
   while(args.length > 0)
     p.send(args.shift());
   if(ret){
-    ret.inherit(p);
+    ret.inherit(p.send.bind(p));
     return ret;
   }
   return p;
@@ -101,9 +114,9 @@ MessageWriter.prototype.messageFactory = function(type,name,callback){
   content.send = function(data){
     var clone = JSON.parse(JSON.stringify(content));
     clone.data = data;
-    try {
-      this.sendfn(JSON.stringify(clone));
-    } catch (e) {
+		if(this.ready){
+      this.sendfn(clone);
+		}else{
       //if there is an error queue it for later when socket connects
       this.queue.push(clone);
     }

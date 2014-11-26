@@ -19,7 +19,7 @@
     "glfx-bower": "*",
     "jschannel": "*",
     "vue": "~0.11.0",
-    "rsvp": "latest",
+    "rsvp": "~3.0.13",
     "jqueryui": "~1.11.2",
     "moment": "~2.8.3",
     "eventEmitter": "~4.2.9"

@@ -5,7 +5,7 @@ jQuery(function(){
     if (file.path == null) {
        $("#notifications").html("Please open a file using File Explorer");
     }
-    methods.listen("te/open", file.path, function (error, data) {
+    ApplicationFork.pipe("te/open", file.path, function (error, data) {
       if (error){
         alert(error);
       }
@@ -24,6 +24,6 @@ jQuery(function(){
 
 $("#save").click(function(){
   if(cfile.path != null){
-    methods.call("te/save", {path: cfile.path, contents: $("#text").val()});
+    ApplicationFork.trigger("te/save", {path: cfile.path, contents: $("#text").val()});
   }
 })

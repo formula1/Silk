@@ -2,70 +2,42 @@
   Similar to meteor.methods
 */
 var WebSocketServer = require('ws').Server;
-var EventEmitter = require("events").EventEmitter;
-var wss = new WebSocketServer({
-  port: 9999
-});
-//require('./methods.js');
-console.log("web socket is at: " + wss.options.host + ":" + wss.options.port);
+var MessageRouter = require(__root+"/core/abstract/MessageRouter.js");
 
-var ClientEmitter = new EventEmitter();
-var id = 0;
-wss.on('connection', function (ws) {
-  ws.id = id++;
-  ClientEmitter.emit("connection",ws);
-  ws.on('close',function(){
-    ClientEmitter.emit("user:disconnection",ws);
-  })
-  ws.on('message', function (message) {
-    try{
-      message = JSON.parse(message);
-      console.log(message);
-    }catch(e){
-      console.log("ERROR")
-      console.log("err:"+e)
-      console.log("mess: "+message)
-      console.log("typeof: "+typeof message);
-      ws.close();
+function Server2Client(port){
+  var id = 0;
+  MessageRouter.call(this,function(message,user){
+    if(message.user){
+      delete message.user;
     }
-    console.log("Message: "+message);
-    if(ClientEmitter.listeners(message.name).length == 0){
-      return ws.send(JSON.stringify({
-        id:message.id,
-        ws:ws.id,
-        error:"method "+message.name+" does not exist"
-      }));
-    }
-    message.ws = ws.id;
-    switch(message.type){
-      case "request":
-        ClientEmitter.once(message.id,function(message){
-          console.log(message);
-          ws.send(JSON.stringify(message));
-        });
-        break;
-      case "pipe":
-        var fn = function(message){
-          ws.send(JSON.stringify(message));
-        }
-        ClientEmitter.on(message.id,fn);
-        ws.on('close',function(){
-          ClientEmitter.removeListener(message.id,fn);
-        });
-        break;
-      case "unpipe":
-        ClientEmitter.removeAllListeners(message.id);
-        break;
-      default:
-        return ws.send(JSON.stringify({
-          id:message.id,
-          ws:ws.id,
-          error:"Bad message type "+message.type
-        }));
-    }
-    ClientEmitter.emit(message.name,message);
+    user.send(JSON.stringify(message));
   });
-});
+  this.wss = new WebSocketServer({
+    port: 9999
+  });
+  console.log("web socket is at: " + this.wss.options.host + ":" + this.wss.options.port);
+
+  var that = this;
+  this.wss.on('connection', function (ws) {
+    ws.id = id++;
+    that.emit("connection",ws);
+    ws.on('close',function(){
+      that.emit("user:disconnection",ws);
+    })
+    ws.on('message', function (message) {
+      try{
+        message = JSON.parse(message);
+      }catch(e){
+        return ws.close();
+      }
+      console.log(message.name+": "+that.getListeners(message.name).length);
+      that.routeMessage(message,ws);
+    });
+  });
+};
+
+Server2Client.prototype = Object.create(MessageRouter.prototype);
+Server2Client.prototype.constructor = Server2Client;
 
 
-global.ClientEmitter = ClientEmitter;
+global.ClientEmitter = new Server2Client(9999);

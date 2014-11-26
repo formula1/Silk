@@ -8,7 +8,7 @@ methods.call = function (name, data, callback) {
   DocumentHost.get(name,data,callback);
 }
 methods.listen = function (name, callback) {
-  return DocumentHost.pipe.apply(DocumentHost,arguments);
+  return DocumentHost.pipe.apply(ApplicationFork,arguments);
 }
 methods.remove = function(id){
   DocumentHost.unpipe(id);

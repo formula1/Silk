@@ -8,13 +8,16 @@ var fs = require("fs");
 
 
 module.exports = function(app,wss){
+  app.get('/', function (req, res) {
+    res.sendFile(__dirname+'/utils/manager/public/index.html');
+  })
   console.log("compiling forks");
   windows = new AF(__root+"/apps/","/",app);
 
   windows.on("finishedCompiling", function(results){
     for(var i in windows.hashmap)
       if(windows.hashmap[i].fork)
-        windows.hashmap[i].fork.send({name:"windows",data:windows.clean});
+        windows.hashmap[i].fork.send({user:"Server",name:"windows",data:windows.clean});
     console.log("\nThese Windows were completed: "+ JSON.stringify(results));
   });
   windows.on("forked", function(fork){
@@ -41,20 +44,11 @@ module.exports = function(app,wss){
   app.get(/^\/bc\/.*/,require(__root+"/core/bower_static.js"));
   app.get(/^\/nm\/.*/,require(__root+"/core/browserify_static.js"));
 
-  ClientEmitter.on("applications",function(message){
-    if(!message.data || !message.data.jspath){
-      message.data = windows.clean;
-      return ClientEmitter.emit(message.id,message);
+  ClientEmitter.add("applications",function(message,callob,next){
+    if(!message || !message.jspath){
+      return windows.clean;
     }
-    try{
-      console.log(windows.clean);
-      message.data = jspath(message.data.jspath,windows.clean).get();
-    }catch(e){
-      message.data = null;
-      message.error = e.toString;
-    } finally{
-      ClientEmitter.emit(message.id,message);
-    }
+    return jspath(message.jspath,windows.clean).get();
   })
 
   app.get("/filesniffer",function(req,res,next){

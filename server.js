@@ -6,13 +6,6 @@ require(__root+"/core/Server2Client_com.js");
 var express = require('express')
 var app = express()
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '/core/public/index.html'));
-})
-
-// static files for client
-app.use(express.static(__dirname + '/core/public'));
-
 var windows = require(__root + "/core")(app);
 
 var server = app.listen(3000, function () {

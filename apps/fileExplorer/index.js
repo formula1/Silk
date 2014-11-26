@@ -23,6 +23,7 @@ var watchers = {};
 function setupWatcher(path,call_ob,next){
   if(call_ob.user.id in watchers){
     watchers[call_ob.user.id].close();
+    console.log("closing watcher");
   }else{
     call_ob.user.on("disconnect", function(){
       closeWatcher(call_ob.user);
@@ -41,21 +42,11 @@ function setupWatcher(path,call_ob,next){
     }
     next(void(0),parsePath(path));
   });
-
-  function closeWatcher(user){
-    try{
-    watchers[user.id].close();
-    }
-    catch(e){
-      console.log(e);
-      console.log(user.id);
-      console.log(watchers[user.id]);
-    }
-  }
 }
 
 methods.add({
-  "fe/list/path": function (path,call_ob,next) {
+  "/list/path": function (path,call_ob,next) {
+    console.log("recieved command");
     if(typeof path == "undefined")
       path = "/";
     else

@@ -1,7 +1,7 @@
 var Silk = {};
 
 Silk.openFile = function(path, mime) {
-  Manager.send("openFile",{
+  Manager.trigger("openFile",{
       path: path,
       mime: mime
   })

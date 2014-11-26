@@ -211,12 +211,21 @@ function forkListens(j,next){
   j.listeners = {};
   fork.on("message", function(m){
     switch(m.cmd){
-      case "send": ClientEmitter.emit(m.message.id,m.message);break;
+      case "send":
+        m.message.name = j.name +"-"+m.message.name;
+        ClientEmitter.emit(m.message.id,m.message);
+        break;
       case "add":
-        j.listeners[m.name] = function(message){
+        console.log("add: "+m.key);
+        j.listeners[m.key] = function(data, message,next){
+          console.log("sending to fork");
+          message.name = m.key;
+          message.user = message.user.id;
           fork.send(message);
         };
-        ClientEmitter.on(m.name,j.listeners[m.name]);
+        ClientEmitter.add(j.name +"-"+ m.key,j.listeners[m.key]);
+//      case "remove":
+
     }
   });
   fork.on("error",function(e){

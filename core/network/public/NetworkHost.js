@@ -36,7 +36,7 @@ function NetworkHost(url,info,config,sconfig){
     url = /^http(s?):\/\/([0-9\.]+|[a-z\-.]+)((?::)[0-9]+)?(.*)$/.exec(url);
     this.RTCHost = new Server(url[2],url[3]||80);
   }else{
-    this.RTCHost = DocumentHost;
+    this.RTCHost = ApplicationFork;
   }
   this.connections = {};
   if(info){

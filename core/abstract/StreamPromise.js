@@ -32,8 +32,7 @@ StreamPromise.prototype.done = function(fn){
 
 StreamPromise.prototype.send = function(data){
   if(!this.ctx) throw Error("cannot send without a context");
-  if(!this.ctx.send) throw Error("context is not a writable stream");
   console.log(this.ctx);
-  this.ctx.send(data);
+  this.ctx(data);
   return this;
 }

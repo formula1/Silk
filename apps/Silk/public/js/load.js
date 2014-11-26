@@ -27,7 +27,7 @@ $(document).ready(function () {
       throw Error("issues : /");
     }
     var te = candidates["Text Editor"];
-    te.send("openFile", sniffed);
+    te.trigger("openFile", sniffed);
     if(te.state != "running")
       te.config.running = true;
     console.log("should be ok now...");
