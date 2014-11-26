@@ -19,7 +19,7 @@ function file_explorer(elem) {
     Silk.openFile($(this).attr("href"),$(this).parent().attr("data-mime"));
    // alert("You're going to have to setup a default view for mimetype: " + $(this).parent().attr("data-mime"));
   })
-  this.listener = ApplicationFork.pipe("/list/path", function (err, list) {
+  this.listener = methods.listen("/list/path", function (err, list) {
     if (err) return alert(JSON.stringify(err));
 
     that.processList(that.href, list);

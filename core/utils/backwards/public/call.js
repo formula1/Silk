@@ -5,13 +5,15 @@ methods.listeners = {};
 
 // function to call server method
 methods.call = function (name, data, callback) {
-  DocumentHost.get(name,data,callback);
+  if(!callback)
+    return ApplicationFork.trigger(name,data);
+  ApplicationFork.get(name,data,callback);
 }
 methods.listen = function (name, callback) {
-  return DocumentHost.pipe.apply(ApplicationFork,arguments);
+  return ApplicationFork.pipe.apply(ApplicationFork,arguments);
 }
 methods.remove = function(id){
-  DocumentHost.unpipe(id);
+  ApplicationFork.unpipe(id);
 }
 // test
 methods.call("silk/apps/list", {

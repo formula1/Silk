@@ -1,3 +1,8 @@
+if(typeof module != "undefined" && module.exports){
+  var EventEmitter = require("events").EventEmitter;
+  var FrameContext = require(__dirname+"/FrameContext.js");
+}
+
 
 function WindowManager(configs){
   EventEmitter.call(this);

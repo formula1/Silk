@@ -1,3 +1,7 @@
+if(typeof module != "undefined" && module.exports){
+  var MessageDuplex = require(__root+"/core/abstract/MessageDuplex.js");
+}
+
 function WinAbs(context, origin){
   this.origin = (origin)?origin:"*";
   MessageDuplex.call(this, function(message){

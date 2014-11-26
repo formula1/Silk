@@ -43,6 +43,7 @@ module.exports = function(app,wss){
   console.log("bower and browserify statics");
   app.get(/^\/bc\/.*/,require(__root+"/core/bower_static.js"));
   app.get(/^\/nm\/.*/,require(__root+"/core/browserify_static.js"));
+  app.get("/api.js",require(__root+"/core/client_api.js"));
 
   ClientEmitter.add("applications",function(message,callob,next){
     if(!message || !message.jspath){

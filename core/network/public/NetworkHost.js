@@ -1,3 +1,9 @@
+if(typeof module != "undefined" && module.exports){
+  var Server = require(__root+"/window/public/Window2Server_com");
+  var NetworkInstance = require(__dirname+"/NetworkUser.js");
+  var RSVP = require("rsvp");
+}
+
 function NetworkHost(url,info,config,sconfig){
   EventEmitter.call(this);
   this.on = this.addListener.bind(this);
@@ -101,4 +107,8 @@ NetworkHost.prototype.offerAccept = function(message){
 		});
   }.bind(this));
   return promise;
+}
+
+if(typeof module != "undefined" && module.exports){
+  module.exports = NetworkHost;
 }

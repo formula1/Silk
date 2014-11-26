@@ -1,3 +1,7 @@
+if(typeof module != "undefined" && module.exports){
+  var WinAbs = require(__root+"/core/window/public/WindowAbstract.js");
+}
+
 function FrameContext(manager,winconfig){
   manager.emit("preBuild",winconfig);
   if(!("id" in winconfig)) throw new Error("I want to ensure you are in control")
@@ -58,4 +62,8 @@ FrameContext.prototype.buildMethods = function(){
       console.log("received message: "+s);
       return s.split("").reverse().join("");
   })
+}
+
+if(typeof module != "undefined" && module.exports){
+  module.exports = FrameContext;
 }
