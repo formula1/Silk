@@ -146,9 +146,4 @@ This is accessible if you add `<script src="/window/Window2Server_com.js"></scri
 These are the managers that applictaions can interacte with unless you specify another or are the RootManager
 
 
-## The rest is still work in progress
-
-##To Install
-    npm i -g silk-gui 
-    cd silk
-    npm start
+# The rest is still work in progress
