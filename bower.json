@@ -3,7 +3,8 @@
   "version": "0.0.2",
   "homepage": "https://github.com/formula1/Silk",
   "authors": [
-    "zodern"
+    "zodern",
+    "formula1"
   ],
   "description": "GUI for developers (and Node Os)",
   "license": "MIT",
@@ -16,12 +17,9 @@
     "tests"
   ],
   "dependencies": {
-    "glfx-bower": "*",
-    "jschannel": "*",
+    "jquery": "latest",
     "vue": "~0.11.0",
     "rsvp": "~3.0.13",
-    "jqueryui": "~1.11.2",
-    "moment": "~2.8.3",
     "eventEmitter": "~4.2.9"
   }
 }

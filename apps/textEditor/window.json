@@ -6,5 +6,8 @@
     "openFile":{
       "mimetype": "^text|(json|javascript|css)$"
     }
+  },
+  "bower_dependencies": {
+    "jquery": "latest"
   }
 }

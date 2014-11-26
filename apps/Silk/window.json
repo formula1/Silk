@@ -2,5 +2,9 @@
   "title": "Silk",
   "category":"manager",
   "url": "/Silk/index.html",
-  "icon": "logo.png"
+  "icon": "logo.png",
+  "bower_dependencies": {
+    "jquery": "latest",
+    "vue": "~0.11.0"
+  }
 }
