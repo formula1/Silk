@@ -89,61 +89,6 @@ Perhaps you don't see any syntaxes. Thats because there are almost none there. A
 
 If theres anyway to improve the system, it will most likely be to change one of the above. Whether its to handle readable/writable node streams or even BlobURIs.
 
-
 # Api
 
-All of the above extend [Wolfy's on Clientside](https://github.com/Wolfy87/EventEmitter/blob/master/docs/api.md) and [Node's on Serverside](http://nodejs.org/api/events.html#events_class_events_eventemitter). `getListeners` is always a method to be used. However, you will most likely not be using them as event Emitters and if you are, either you or me are doing something wrong.
-
-## Abstract API
-
-#### MessageRouter
-
-> add - Adds a function to listen to a namespace. This will be called the most by average users
-
-* add(object<String:Function<data,message_object,next>>) - you can set an "array" of listeners at one time
-* add(String, Function) - you can set a single listener
-
-#### MessageWriter
-
-> trigger - This will make a call
-
-* trigger(String, Object) - Calls the namespace you would like to hit
-
-> get - This will make a call with an expected return
-
-* get(String, Object)-> [RSVP.Promise](https://github.com/tildeio/rsvp.js/) - Calls the namespace you would like to hit and returns a promise that will resolve or fail once the data comes back
-* get(String, Object, Function<Error, Object>) - Calls the namespace you would like to hit and calls the function once it comes back with an error or a result
-
-
-> pipe - This will make a call and return data multiple times. Doesn't open until you send
-
-* pipe(String, Object)-> [StreamPromise](https://github.com/formula1/Silk/blob/development/core/abstract/StreamPromise.js) - Calls the namespace you would like to hit and returns a promise that will resolve or fail once the data comes back
-* pipe(String, Object, Function<Error, Object> - Calls the namespace you would like to hit and calls the function once it comes back with an error or a result
-
-> abort - Not working 100%
-
-#### MessageDuplex
-
-> does both of the above
-
-
-## Application API
-
-#### global.methods
-
-This is accessible within the main script of every app.
-
-**Important** - Anything routes you specify will get prepended with `YourFolderName-` This is to ensure no one conflicts in listeners (unless by foldername)
-
-#### window.DocumentHost and window.ApplicationFork
-
-This is accessible if you add `<script src="/window/Window2Server_com.js"></script>` Document host allows you to ask for any method within the system. Application fork prepends your request with `YourFolderName-`.
-
-## Window Manager API
-
-####  window.Manager and  window.RootManager
-
-These are the managers that applictaions can interacte with unless you specify another or are the RootManager
-
-
-# The rest is still work in progress
+This is kind of documented in the /docs folder. It has been brought to you in part by http://usejsdoc.org/
