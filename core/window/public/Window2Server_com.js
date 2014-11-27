@@ -2,10 +2,18 @@ if(typeof module != "undefined" && module.exports){
   var MessageWriter = require(__root+"/core/abstract/MessageWriter.js");
 }
 
-// connect to socket
+/**
+  Provides a websocket connection to a host
+  @constructor
+  @augments MessageWriter
+  @param {string} host - the domain that we will be speaking to
+  @param {string} [port=80] - the port to connect to
+  @param {string} [path=""] - the path that will be appended to all namespaces
+*/
 function Server(host,port,path){
   var that = this;
   path = (path)?path:false;
+  port = (port)?port:80;
   MessageWriter.call(this, function(message){
     if(path)
       message.name = path + message.name;
@@ -37,6 +45,16 @@ function Server(host,port,path){
 Server.prototype = Object.create(MessageWriter.prototype);
 Server.prototype.constructor = Server;
 
+/**
+  Provides the server that the current application was originally created by
+  @namespace DocumentHost
+  @augments Server
+*/
+/**
+  Provides a direct communication to the forked process that the serverside runs on
+  @namespace ApplicationFork
+  @augments Server
+*/
 if(typeof module != "undefined" && module.exports){
   module.exports = Server;
 }else{

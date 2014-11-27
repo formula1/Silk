@@ -1,7 +1,13 @@
 if(typeof module != "undefined" && module.exports){
   var WinAbs = require(__root+"/core/window/public/WindowAbstract.js");
 }
-
+/**
+  A managers way of talking to windows
+  @constructor
+  @augments WinAbs
+  @param {window} manager - the manager it belongs to
+  @param {object} winconfig - the configuration for the window
+*/
 function FrameContext(manager,winconfig){
   manager.emit("preBuild",winconfig);
   if(!("id" in winconfig)) throw new Error("I want to ensure you are in control")
@@ -26,6 +32,11 @@ function FrameContext(manager,winconfig){
 FrameContext.prototype = Object.create(WinAbs.prototype);
 FrameContext.prototype.constructor = FrameContext;
 
+/**
+  Opens up the frame within the container or becomes the container
+  @memberof FrameContext
+  @param {HTMLDomElement} container - container to append to or the iframe to become
+*/
 FrameContext.prototype.open = function(container){
   if(this.state != "dormant"){
      throw Error("This window is already open");

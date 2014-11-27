@@ -6,11 +6,14 @@ var ForkUser = require(__dirname+"/user_puppet.js");
 var users = {};
 var forkname = process.env.start.substring((__root+"/apps").length).split("/").splice(1,1)[0];
 console.log("name: "+forkname);
-/*
-  Similar to meteor.methods
-*/
 console.log("in the child");
 
+
+/**
+  Is the forks private router. its available at a global scope
+  @namespace methods
+  @augments MessageRouter
+*/
 var methods = new MessageRouter(function(message){
   process.send({cmd:"send",message:message});
 });

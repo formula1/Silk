@@ -1,7 +1,12 @@
 
 var util = require("util");
 var events = require("events")
-
+/**
+  Emits Events as if it was a websocket
+  @constructor
+  @augments EventEmitter
+  @param {string} id - the id of the websocket
+*/
 function User(id){
   this.id = id;
 }

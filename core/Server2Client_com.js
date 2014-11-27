@@ -3,7 +3,12 @@
 */
 var WebSocketServer = require('ws').Server;
 var MessageRouter = require(__root+"/core/abstract/MessageRouter.js");
-
+/**
+  Provides a commincation between anything on the server and the websocket connected to the client
+  @constructor
+  @augments MessageRouter
+  @param {integer} port - the port to listen on
+*/
 function Server2Client(port){
   var id = 0;
   MessageRouter.call(this,function(message,user){
@@ -39,5 +44,4 @@ function Server2Client(port){
 Server2Client.prototype = Object.create(MessageRouter.prototype);
 Server2Client.prototype.constructor = Server2Client;
 
-
-global.ClientEmitter = new Server2Client(9999);
+module.exports = Server2Client;
