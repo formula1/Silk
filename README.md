@@ -126,24 +126,6 @@ All of the above extend [Wolfy's on Clientside](https://github.com/Wolfy87/Event
 
 > does both of the above
 
+# Api
 
-## Application API
-
-#### global.methods
-
-This is accessible within the main script of every app.
-
-**Important** - Anything routes you specify will get prepended with `YourFolderName-` This is to ensure no one conflicts in listeners (unless by foldername)
-
-#### window.DocumentHost and window.ApplicationFork
-
-This is accessible if you add `<script src="/window/Window2Server_com.js"></script>` Document host allows you to ask for any method within the system. Application fork prepends your request with `YourFolderName-`.
-
-## Window Manager API
-
-####  window.Manager and  window.RootManager
-
-These are the managers that applictaions can interacte with unless you specify another or are the RootManager
-
-
-# The rest is still work in progress
+This is kind of documented in the /docs folder. It has been brought to you in part by http://usejsdoc.org/
