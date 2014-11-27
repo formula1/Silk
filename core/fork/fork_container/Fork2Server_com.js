@@ -10,9 +10,12 @@ console.log("in the child");
 
 
 /**
-  Is the forks private router. its available at a global scope
-  @namespace methods
-  @augments MessageRouter
+  Is the forks private router. its available at a global scope. A fork internal
+  implementation of {@linkcode http://nodejs.org/api/child_process.html#child_process_child_send_message_sendhandle}
+
+  @var {MessageRouter} methods
+  @memberof ServerSide
+
 */
 var methods = new MessageRouter(function(message){
   process.send({cmd:"send",message:message});

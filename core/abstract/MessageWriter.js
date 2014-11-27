@@ -12,7 +12,7 @@ if(typeof module != "undefined"){
 
 /**
 	An io listener that sends messages to the functions wanting to handle them.
-	@constructor
+	@interface
 	@augments EventEmitter
 	@param {function} wSendFn - Function that will be called when you wish to write something to a target.
 */

@@ -1,0 +1,15 @@
+{
+  "source": {
+    "include": [ "core" ],
+    "exclude": [ "core/docs" ],
+    "allowUnknownTags": true
+
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "docs"
+  },
+  "plugins": [
+    "core/docs/implementation.js"
+  ]
+}

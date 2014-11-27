@@ -4,7 +4,7 @@ var http = require("http");
 var https = require("https");
 var fs = require("fs");
 var async = require("async");
-
+var Server2Fork = require(__dirname+"/Server2Fork_com.js");
 
 var windowreq = ["url","title","icon"];
 var windowuri = ["url","icon"]
@@ -207,39 +207,6 @@ function createFork (j,next){
 function forkListens(j,next){
   if(!j.fork) return next(void(0),j);
   console.log("adding listeners to fork: "+j.name);
-  var fork = j.fork;
-  j.listeners = {};
-  fork.on("message", function(m){
-    switch(m.cmd){
-      case "send":
-        m.message.name = j.name +"-"+m.message.name;
-        ClientEmitter.emit(m.message.id,m.message);
-        break;
-      case "add":
-        console.log("add: "+m.key);
-        j.listeners[m.key] = function(data, message,next){
-          console.log("sending to fork");
-          message.name = m.key;
-          message.user = message.user.id;
-          fork.send(message);
-        };
-        ClientEmitter.add(j.name +"-"+ m.key,j.listeners[m.key]);
-//      case "remove":
-
-    }
-  });
-  fork.on("error",function(e){
-    console.log(j.name+e);
-  });
-  fork.on("close",function(code,signal){
-    for(var i in j.listeners){
-      ClientEmitter.removeListener(i,j.listeners[i]);
-    }
-    delete j.listeners;
-    ClientEmitter.emit("fork:disconnect",fork);
-  })
-  ClientEmitter.on("user:disconnect",function(){
-    fork.send({cmd:"disconnect"});
-  })
+  j.S2fork = Server2Fork(j,j.fork)
   next(void(0),j);
 }

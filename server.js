@@ -1,10 +1,6 @@
 global.__root = __dirname;
 var path = require('path');
 
-var Server2Client = require(__root+"/core/Server2Client_com.js");
-
-global.ClientEmitter = new Server2Client(9999);
-
 var express = require('express')
 var app = express()
 

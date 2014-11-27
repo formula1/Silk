@@ -5,6 +5,7 @@ if(typeof module != "undefined" && module.exports){
   A managers way of talking to windows
   @constructor
   @augments WinAbs
+  @memberof ClientSide
   @param {window} manager - the manager it belongs to
   @param {object} winconfig - the configuration for the window
 */

@@ -1,5 +1,4 @@
 /**
-  @namespace StreamPromise
   @constructor
   @param {function} sendFn - Function that will be called when you wish to write something to a target.
 */

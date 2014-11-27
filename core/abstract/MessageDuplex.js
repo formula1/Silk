@@ -13,6 +13,7 @@ if(typeof module != "undefined" && module.exports){
 /**
   An io listener that can also write messages.
   @constructor
+  @interface
   @augments MessageRouter
   @augments MessageWriter
   @param {function} writwFn - Function that will be called when a MessageDuplex is ready to write a message

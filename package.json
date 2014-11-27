@@ -19,6 +19,7 @@
     "rsvp": "~3.0.14"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "docs": "jsdoc -c core/docs/conf.json"
   }
 }

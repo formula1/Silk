@@ -11,6 +11,7 @@ module.exports = AppFactory;
   Constructs the folder into forks that will be able to hook into the {@link Server2Client_com}
   This also listens for filesystem changes
 
+  @memberof ServerSide
   @constructor
   @augments EventEmitter
   @requires express

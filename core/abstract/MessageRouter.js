@@ -11,6 +11,7 @@ if(typeof module != "undefined" && module.exports){
 /**
   An io listener that sends messages to the functions wanting to handle them.
   @constructor
+  @interface
   @augments EventEmitter
   @param {function} rSendFn - Function that will be called when the router wants to send to the originator {@link MessageRouter#rSendFn}.
 */

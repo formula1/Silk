@@ -4,7 +4,9 @@ if(typeof module != "undefined" && module.exports){
 
 
 /**
-  Is a window that can be messaged to. Extends MessageDuplex so has everything there associated to it
+  Is a window that can be messaged to. Extends MessageDuplex so has everything there associated to it.
+  It is based off window.postMessage
+  @memberof ClientSide
   @constructor
   @augments MessageDuplex
   @param {window} [context] - the window it will be speaking to
@@ -51,13 +53,13 @@ WinAbs.prototype.open = function(context){
 
 /**
   If this window has a parent, then we guess the parent is a manager. This is provided globally
-  @namespace Manager
-  @augments WinAbs
+  @memberof ClientSide
+  @var {WinAbs} Manager
 */
 /**
   If this window is not top, there is definitely a manager there. This is provided globally
-  @namespace RootManager
-  @augments WinAbs
+  @memberof ClientSide
+  @var {WinAbs} RootManager
 */
 
 if(window.parent && window.parent != window){

@@ -5,9 +5,24 @@ var windows;
 var jspath = require(__dirname+"/abstract/jspath-chain");
 var express = require("express");
 var fs = require("fs");
+var Server2Client = require(__root+"/core/Server2Client_com.js");
 
+/**
+These are all the ServerSide IO implementations available to core and/or app developers.
 
-module.exports = function(app,wss){
+@namespace ServerSide
+*/
+
+module.exports = function(app){
+  /**
+  Is the Global Servserside router of websocket events
+
+  @var {Server2Client} ClientEmitter
+  @memberof ServerSide
+
+  */
+  global.ClientEmitter = new Server2Client(9999);
+
   app.get('/', function (req, res) {
     res.sendFile(__dirname+'/utils/manager/public/index.html');
   })

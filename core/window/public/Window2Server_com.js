@@ -3,7 +3,10 @@ if(typeof module != "undefined" && module.exports){
 }
 
 /**
-  Provides a websocket connection to a host
+  Provides a websocket connection to a host. Is the client implementation of
+  {@linkcode https://github.com/einaros/ws}
+
+  @memberof ClientSide
   @constructor
   @augments MessageWriter
   @param {string} host - the domain that we will be speaking to
@@ -47,13 +50,13 @@ Server.prototype.constructor = Server;
 
 /**
   Provides the server that the current application was originally created by
-  @namespace DocumentHost
-  @augments Server
+  @var {Server} DocumentHost
+  @memberof ClientSide
 */
 /**
   Provides a direct communication to the forked process that the serverside runs on
-  @namespace ApplicationFork
-  @augments Server
+  @var {Server} ApplicationFork
+  @memberof ClientSide
 */
 if(typeof module != "undefined" && module.exports){
   module.exports = Server;

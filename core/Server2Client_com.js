@@ -4,7 +4,10 @@
 var WebSocketServer = require('ws').Server;
 var MessageRouter = require(__root+"/core/abstract/MessageRouter.js");
 /**
-  Provides a commincation between anything on the server and the websocket connected to the client
+  Provides a commincation between anything on the server and the websocket connected to the client.
+  Is the serverside implementation of {@linkcode https://github.com/einaros/ws}
+
+  @memberof ServerSide
   @constructor
   @augments MessageRouter
   @param {integer} port - the port to listen on

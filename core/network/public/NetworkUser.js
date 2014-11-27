@@ -1,6 +1,9 @@
 /**
   A WebRTC connection between you and another party. Extends message duplex allowing
-  you to add and send get, trigger and pipe requests to the other party
+  you to add and send get, trigger and pipe requests to the other party. This is an
+  implementation of {@linkcode https://developer.mozilla.org/en-US/docs/Web/Guide/API/WebRTC}
+
+  @memberof ClientSide
   @constructor
   @augments MessageDuplex
   @param {NetworkHost} nethost - the network that initiated your connection

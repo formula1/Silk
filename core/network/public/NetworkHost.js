@@ -8,6 +8,7 @@ if(typeof module != "undefined" && module.exports){
   a compatible app as yours. The manner in which they find other users is meaningless.
   However, it provides a way to make an offer to another user and to accept an offer.
   @constructor
+  @memberof ClientSide
   @augments EventEmitter
   @param {string} url - the url that hosts the users you wish to find
   @param {object} info - the info you wish to give inorder for other users to find you

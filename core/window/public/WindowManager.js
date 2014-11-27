@@ -2,12 +2,21 @@ if(typeof module != "undefined" && module.exports){
   var EventEmitter = require("events").EventEmitter;
   var FrameContext = require(__dirname+"/FrameContext.js");
 }
+/**
+  These are all the classes and globals available on the Client
+  To do a mass load of the clientside api use `<script src="/api.js" ></script>`
+  This will load everything in one package except for RSVP and EventEmitter
+
+  @namespace ClientSide
+*/
+
 
 /**
   Creates a new WindowManager to be able to open, close and load windows on a web
   client.
   @constructor
   @augments EventEmitter
+  @memberof ClientSide
   @param {object} [configs] - application configurations that can be given from anywhere
 */
 function WindowManager(configs){
