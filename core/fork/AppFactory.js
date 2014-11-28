@@ -21,9 +21,9 @@ module.exports = AppFactory;
   @param {object} app - express application (this is subject to change)
 */
 function AppFactory(folderpath,urlpath,app){
-  if(typeof folder == "undefined")
+  if(typeof folderpath == "undefined")
     throw Error("In Order to use the abstract, you need to provide a folder to load from");
-  if(!/\/$/.test(folderpath)) folder += "/";
+  if(!/\/$/.test(folderpath)) folderpath += "/";
   if(!/\/$/.test(urlpath)) urlpath += "/"
   this.folder = folderpath;
   this.urlpath = urlpath;
@@ -44,7 +44,7 @@ function AppFactory(folderpath,urlpath,app){
   process.nextTick(this.compileFolder.bind(this));
 
   this.on("compiledSingle",function(j){
-    that.router.use(urlpath+j.name, express.static(folder+j.name+"/public"));
+    that.router.use(urlpath+j.name, express.static(this.folder+j.name+"/public"));
     that.router.get(urlpath+j.name, function(req,res,next){
       res.redirect(301,j.url);
     });

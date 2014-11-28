@@ -4,7 +4,7 @@ if(typeof module != "undefined" && module.exports){
 }
 /**
   These are all the classes and globals available on the Client
-  To do a mass load of the clientside api use `<script src="/api.js" ></script>`
+  To do a mass load of the clientside api use &lt;script src="/api.js" &gt;&lt;/script&gt;
   This will load everything in one package except for RSVP and EventEmitter
 
   @namespace ClientSide

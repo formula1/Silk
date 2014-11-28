@@ -50,14 +50,14 @@ MessageRouter.prototype.rSendFn = function(message,user){
   @return this
 */
 MessageRouter.prototype.add = function(keymethod){
-  if(!m) throw new Error("need either a Object(key:function), a key and function or a key");
+  if(!keymethod) throw new Error("need either a Object(key:function), a key and function or a key");
   var that = this;
   var ob = {};
   var ret;
   if(arguments.length == 2){
     ob[arguments[0]] = arguments[1];
   }else{
-    ob = m
+    ob = keymethod
   }
 
   Object.keys(ob).forEach(function(key){

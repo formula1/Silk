@@ -22,7 +22,7 @@ function Server2Fork(j,fork){
           message.user = message.user.id;
           fork.send(message);
         };
-        ClientEmitter.add(j.name +"-"+ m.key,j.listeners[m.key]);
+        ClientEmitter.add(j.name +"-"+ m.key,listeners[m.key]);
   //      case "remove":
     }
   });
@@ -31,7 +31,7 @@ function Server2Fork(j,fork){
   });
   fork.on("close",function(code,signal){
     for(var i in listeners){
-      ClientEmitter.removeListener(i,j.listeners[i]);
+      ClientEmitter.removeListener(i,listeners[i]);
     }
     delete listeners;
     ClientEmitter.emit("fork:disconnect",fork);
