@@ -1,9 +1,0 @@
-{
-  "title": "Tunnel Client",
-  "category": "override",
-  "url": "index.html",
-  "icon": "icon.png",
-  "bower_dependencies":{
-    "tablesaw":"latest"
-  }
-}
