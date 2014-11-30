@@ -1,4 +1,4 @@
-var Tunnel2Proxy = require(__root+"/core/network/Tunnel2Proxy_com.js");
+var Tunnel2Proxy = require(__dirname+"/Tunnel2Proxy_com.js");
 
 var tunnel = new Tunnel2Proxy();
 
