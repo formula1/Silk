@@ -129,8 +129,7 @@ ProxyServer.prototype.handleSocketMessage = function(message,c){
       console.log("client ok "+message.client);
       message.data = message.client;
       this.clients[message.client].res.writeHead(200,{
-       'Set-Cookie': 'client='+message.client+"; pwp="+wp+"; path=/; expires=01 Jan 2020 00:00:00 GMT"
-
+       'Set-Cookie': 'client='+message.client+"; pwp="+wp+"; path=/; expires=01 Jan 2020 00:00:00 GMT;"
       });
       var fileStream = fs.createReadStream(__dirname+"/public/redirect.html");
       fileStream.pipe(this.clients[message.client].res);
@@ -193,7 +192,7 @@ ProxyServer.prototype.shield = function(req,res){
   if(u.pathname === "/exit"){
     res.writeHead(302, {
       'Location': '/',
-      "Set-Cookie": "client=0;pwp=0; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      "Set-Cookie": "client=0; pwp=0; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;"
 
       //add other headers here...
     });
@@ -203,7 +202,7 @@ ProxyServer.prototype.shield = function(req,res){
   var headers = {};
   if(cook.client){
     if(!(cook.client in this.clients)){
-      headers["Set-Cookie"]= "client=0;pwp=0; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      headers["Set-Cookie"]= "client=0; pwp=0; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
       delete cook.client;
     }else{
       return;
