@@ -5,6 +5,7 @@ var fs = require("fs");
 
 module.exports = function(req,res,next){
   res.setHeader('content-type', 'application/javascript');
+  res.write("var hp="+hp+", wp="+wp+";\n");
   async.eachSeries([
     __core+"/abstract/StreamPromise.js",
     __core+"/abstract/MessageRouter.js",
