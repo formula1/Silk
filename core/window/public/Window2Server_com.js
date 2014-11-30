@@ -66,9 +66,9 @@ if(typeof module != "undefined" && module.exports){
   window.DocumentHost = null;
   (function(url){
     url = /^(http[s]?):\/\/([0-9\.]+|[a-z\-.]+)([?::][0-9]+)?([\/][A-Za-z0-9_\-]+)?(\?.*)?/.exec(url);
-    var port = 3000 - url[3].substring(1);
-    window.DocumentHost = new Server(url[2],wp);
+    var port = (typeof wp != "undefined")?wp:(document.cookie.pwp)?document.cookie.pwp:9999;
+    window.DocumentHost = new Server(url[2],port);
     if(url[4])
-      window.ApplicationFork = new Server(url[2],wp,url[4].substring(1)+"-");
+      window.ApplicationFork = new Server(url[2],port,url[4].substring(1)+"-");
   })(document.URL)
 }
