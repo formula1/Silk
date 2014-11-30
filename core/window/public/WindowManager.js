@@ -37,7 +37,9 @@ WindowManager.prototype.off = EventEmitter.prototype.removeListener;
   @param {object} configs - application configurations that can be given from anywhere
 */
 WindowManager.prototype.load = function(configs){
+  console.log("loading");
   configs.forEach(this.registerWindow.bind(this));
+  console.log("done");
   this.emit("load");
   return this;
 }
@@ -48,9 +50,15 @@ WindowManager.prototype.load = function(configs){
   @param {object|FrameContext} configs - application configuration or framecontext that can be given from anywhere
 */
 WindowManager.prototype.registerWindow = function(config){
-  if(!(config instanceof FrameContext))
+  console.log("f");
+  if(!(config instanceof FrameContext)){
+    console.log("create");
     var win = new FrameContext(this, config);
-  else if(config.id in this.windows) return
+    console.log("didit");
+  }else if(config.id in this.windows){
+    console.log("found");
+     return
+  }
   this.windows[config.id] = win;
   this.configs.push(config);
   this.emit("registered", win);

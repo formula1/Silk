@@ -78,7 +78,7 @@ NetworkInstance.prototype.registerChannel = function(channel){
     that.handleMessage(message,event.target);
 	};
 	this.channel.onopen = function(){
-    that.onReady();
+    that.ready();
     that.nethost.emit("ready",this);
   }
   this.channel.onclose = this.emit.bind(this,"close");

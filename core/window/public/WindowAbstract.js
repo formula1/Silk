@@ -14,11 +14,13 @@ if(typeof module != "undefined" && module.exports){
 */
 function WinAbs(context, origin){
   this.origin = (origin)?origin:"*";
+  console.log("b4messdup");
   MessageDuplex.call(this, function(message){
     message.user = null;
     this.context.postMessage(JSON.stringify(message),this.origin);
   }.bind(this));
   var that = this;
+  console.log("messdup");
   if(context)
     setTimeout(function(){
       that.open(context);
@@ -47,7 +49,7 @@ WinAbs.prototype.open = function(context){
       that.handleMessage(message,that.context);
     },10);
   });
-  this.onReady();
+  this.ready();
 }
 
 

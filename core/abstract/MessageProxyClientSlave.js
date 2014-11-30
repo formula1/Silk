@@ -1,3 +1,5 @@
+
+
 function MessageProxy(clientSend,slaveSend){
   this.slaves = {}; //slaves can have multiple clients at a time
   this.clients = {}; //clients can only have one slave at a time
@@ -8,17 +10,15 @@ function MessageProxy(clientSend,slaveSend){
 MessageProxy.prototype.clientEnter = function(client){
   client.id = Date.now()+"|"+Math.random();
   client.slave = void(0);
-  this.clients[client.id] = client;
+  this.clients[client.id] = {id:client.id,slave:client.slave,res:client,sq:[]};
 }
 
-MessageProxy.prototype.bindClient = function(message,client){
-  if(!this.slaves[message.data]){
-    message.data = null;
-    message.error = "This Local doesn't exist";
-    return this.clientSend(message,client);
+MessageProxy.prototype.bindClient = function(slave,client){
+  if(!this.slaves[slave.id]){
+    throw new Error("nonexistant skave");
   }
-  client.slave = this.slaves[message.data];
-  this.slaves[message.data].clients.push(client.id);
+  this.clients[client.id].slave = this.slaves[slave.id];
+  this.slaves[slave.id].clients.push(client.id);
 };
 
 MessageProxy.prototype.clientLeave = function(client){
@@ -36,7 +36,7 @@ MessageProxy.prototype.clientMessage = function(message,client){
     message.error = "User has no local";
     return this.clientSend(message,client);
   }
-  message.client = ws.id;
+  message.client = client.id;
   this.slaveSend(message,this.clients[client.id].slave);
 };
 
@@ -44,7 +44,7 @@ MessageProxy.prototype.slaveEnter = function(slave){
   slave.id = Date.now()+"|"+Math.random();
   slave.clients = [];
   this.slaves[slave.id] = slave;
-  this.slaveSend({name:"subdomain",type:"event",message:slave.id},slave);
+  this.slaveSend({name:"id",type:"trigger",data:slave.id},slave);
 }
 
 MessageProxy.prototype.slaveLeave = function(slave){
@@ -62,10 +62,14 @@ MessageProxy.prototype.slaveMessage = function(message,slave){
     message.error = "User does not exist";
     this.slaveSend(message,slave);
   }
-  if(slave.users.indexOf(message.client) == -1){
+  if(slave.clients.indexOf(message.client) == -1){
     message.data = null;
     message.error = "This local is not subscribed to this user";
     this.slaveSend(message,slave);
   }
   this.clientSend(message, this.clients[message.client]);
+}
+
+if(typeof module != "undefined" && module.exports){
+  module.exports = MessageProxy;
 }

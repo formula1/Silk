@@ -25,7 +25,7 @@ function MessageWriter(wSendFn){
 	}
 	this.wSendFn = wSendFn;
   this.queue = [];
-	this.ready = false;
+	this._ready = false;
   // method calls that are sent and waiting an answer
 }
 
@@ -51,7 +51,7 @@ MessageWriter.prototype.wSendFn = function(message,user){
 	@memberof MessageWriter
 */
 MessageWriter.prototype.ready = function(){
-	this.ready = true;
+	this._ready = true;
   while(this.queue.length > 0){
     this.wSendFn(this.queue.shift());
   }
@@ -64,7 +64,7 @@ MessageWriter.prototype.ready = function(){
 	@memberof MessageWriter
 */
 MessageWriter.prototype.stop = function(){
-	this.ready = false;
+	this._ready = false;
 }
 
 /**
@@ -89,7 +89,7 @@ MessageWriter.prototype.returnMessage = function (message) {
 	@param {object} data - the data you want to send them
 */
 MessageWriter.prototype.trigger = function(name,data){
-  this.messageFactory("event",name).send(data);
+  this.messageFactory("trigger",name).send(data);
 }
 
 /**
@@ -121,7 +121,7 @@ MessageWriter.prototype.get = function (name, data, cb) {
       ret.resolve(message);
     }
   }
-  this.messageFactory("request", name, cb).send(data);
+  this.messageFactory("get", name, cb).send(data);
   return (ret)?ret.promise:this;
 }
 
@@ -183,16 +183,16 @@ MessageWriter.prototype.messageFactory = function(type,name,callback){
   content.send = function(data){
     var clone = JSON.parse(JSON.stringify(content));
     clone.data = data;
-		if(this.ready){
+		if(this._ready){
       this.wSendFn(clone);
 		}else{
       //if there is an error queue it for later when socket connects
       this.queue.push(clone);
     }
   }.bind(this);
-  if(type == "event")
+  if(type == "trigger")
     return content;
-  if(type == "request")
+  if(type == "get")
 		this.once(id,callback);
 	if(type == "pipe")
 		this.addListener(id,callback);

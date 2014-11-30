@@ -1,6 +1,7 @@
 var path = require("path");
 global.__root = path.resolve(__dirname,"../../../");
 var MessageRouter = require(__root+"/core/abstract/MessageRouter.js");
+var MessageWriter = require(__root+"/core/abstract/MessageWriter.js");
 var ForkUser = require(__dirname+"/user_puppet.js");
 
 var users = {};
@@ -32,6 +33,7 @@ methods.on("remove",function(key,fn){
 process.on("message",function(message){
   console.log(message.name);
   switch(message.cmd){
+    case "message" : ForkRouter.returnMessage(message.message)
     case "disconnect": message.user.emit("close"); break;
     case "close": break; //expected to close, will close forcfully in 5 seconds
     case "sleep": break; //Head is removed from the window manager so updates are impossible
@@ -46,6 +48,11 @@ process.on("message",function(message){
 
 // make global because it will be used in most files.
 global.methods = methods;
+
+global.ForkRouter = new MessageWriter(function(message,client){
+  process.send({cmd:"message",message:message});
+});
+
 
 process.nextTick(function(){
   require(process.env.start);

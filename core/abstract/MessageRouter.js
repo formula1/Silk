@@ -23,6 +23,7 @@ function MessageRouter(rSendFn){
   }
   if(!rSendFn)
     throw new Error("Need a manner to send back");
+  this._returns = new EventEmitter();
   this.on = this.addListener.bind(this);
   this.off = this.removeListener.bind(this);
   this.rSendFn = rSendFn;
@@ -50,7 +51,8 @@ MessageRouter.prototype.rSendFn = function(message,user){
   @return this
 */
 MessageRouter.prototype.add = function(keymethod){
-  if(!keymethod) throw new Error("need either a Object(key:function), a key and function or a key");
+  if(!keymethod)
+    throw new Error("need either a Object(key:function), a key and function or a key");
   var that = this;
   var ob = {};
   var ret;
@@ -75,39 +77,40 @@ MessageRouter.prototype.add = function(keymethod){
   @param {object} message - An object containing important message information
   @param {object} user - the user you want to recieve in the {@link MessageRouter#rSendFn}
 */
-MessageRouter.prototype.routeMessage = function(message,user){
+MessageRouter.prototype.routeMessage = function(message,user,retFn){
   var that = this;
+  retFn = (retFn)?retFn:this.rSendFn;
 
   if(this.getListeners(message.name).length == 0){
     message.data = null;
     message.error = "method "+message.name+" does not exist";
-    return this.rSendFn(message,user);
+    return retFn(message,user);
   }
 
   message.user = user;
 
   if(this.getListeners(message.id).length == 0)
     switch(message.type){
-      case "request":
-        this.once(message.id,function(message){
-          that.rSendFn(message,user);
+      case "get":
+        this._returns.once(message.id,function(message){
+          retFn(message,user);
         });
         break;
       case "pipe":
         var fn = function(message){
-          that.rSendFn(message,user);
+          retFn(message,user);
         };
-        this.on(message.id,fn);
+        this._returns.on(message.id,fn);
         message.user.on('close',this.removeListener.bind(this,message.id,fn))
         break;
       case "abort":
-        this.removeAllListeners(message.id);
+        this._returns.removeAllListeners(message.id);
         break;
-      case "event": break;
+      case "trigger": break;
       default:
         message.data = null;
         message.error = "Bad message type "+message.type;
-        return this.rSendFn(message,user);
+        return retFn(message,user);
     }
   doAsync(function(){
     that.emit(message.name,message);
@@ -125,7 +128,7 @@ MessageRouter.prototype.processMessage = function(message,fn){
   var next = function(err,result){
     message.error = (err)?err.stack:null;
     message.data =(err)?null:result;
-    that.emit(message.id,message);
+    that._returns.emit(message.id,message);
   };
   try{
     var result = fn(message.data,message,next);

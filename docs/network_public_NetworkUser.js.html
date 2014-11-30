@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: network/public/NetworkUser.js</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -106,7 +106,7 @@ NetworkInstance.prototype.registerChannel = function(channel){
     that.handleMessage(message,event.target);
 	};
 	this.channel.onopen = function(){
-    that.onReady();
+    that.ready();
     that.nethost.emit("ready",this);
   }
   this.channel.onclose = this.emit.bind(this,"close");

@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: window/public/Window2Server_com.js</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>if(typeof module != "undefined" &amp;&amp; module.exports){
@@ -54,7 +54,7 @@ function Server(host,port,path){
   try {
     this.host = "ws://"+host+":"+port;
     this.socket = new WebSocket(this.host);
-    this.socket.onopen = this.onReady.bind(this);
+    this.socket.onopen = this.ready.bind(this);
     this.socket.onmessage = function(message){
       try{
         message = JSON.parse(message.data);
@@ -66,7 +66,7 @@ function Server(host,port,path){
     }
     this.socket.onclose = function(){
       console.log('Socket Status: ' + that.socket.readyState + ' (Closed)');
-      that.onNotReady();
+      that.stop();
     };
   } catch (exception) {
     console.log('Error' + exception);

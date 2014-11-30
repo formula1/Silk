@@ -9,10 +9,11 @@
 function Server2Fork(j,fork){
   var listeners = {};
   fork.on("message", function(m){
+    console.log("recieved mess");
     switch(m.cmd){
       case "send":
         m.message.name = j.name +"-"+m.message.name;
-        ClientEmitter.emit(m.message.id,m.message);
+        ClientEmitter._returns.emit(m.message.id,m.message);
         break;
       case "add":
         console.log("add: "+m.key);
@@ -23,6 +24,16 @@ function Server2Fork(j,fork){
           fork.send(message);
         };
         ClientEmitter.add(j.name +"-"+ m.key,listeners[m.key]);
+        break;
+      case "message":
+        ClientEmitter.routeMessage(m.message,fork,function(message,fork){
+          console.log("back again");
+          fork.send({cmd:"message",message:message});
+        })
+        break;
+      default:
+        console.log(m);
+        throw new Error("nonexsistant command");
   //      case "remove":
     }
   });

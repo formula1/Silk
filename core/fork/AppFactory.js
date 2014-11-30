@@ -25,6 +25,8 @@ function AppFactory(folderpath,urlpath,app){
     throw Error("In Order to use the abstract, you need to provide a folder to load from");
   if(!/\/$/.test(folderpath)) folderpath += "/";
   if(!/\/$/.test(urlpath)) urlpath += "/"
+  if(!/^\//.test(urlpath)) urlpath = "/"+urlpath;
+
   this.folder = folderpath;
   this.urlpath = urlpath;
   this.hashmap = {};

@@ -21,8 +21,9 @@ if(typeof module != "undefined" && module.exports){
 */
 
 function MessageDuplex(wSendFn, rSendFn){
-  if(!readFn) rSendFn = wSendFn;
-  if(typeof writeFn == "undefined") throw new Error("Need at least 1 function");
+  console.log("mesdup")
+  if(!rSendFn) rSendFn = wSendFn;
+  if(typeof wSendFn == "undefined") throw new Error("Need at least 1 function");
   var _writeFn = wSendFn;
   this.originator = Date.now()+"|"+Math.random();
   var that = this;
@@ -37,9 +38,11 @@ function MessageDuplex(wSendFn, rSendFn){
     }
     _writeFn(message);
   };
-  MessageRouter.call(this, readFn);
+  console.log("b4rout")
+  MessageRouter.call(this, rSendFn);
   this.rSendFn = this.rSendFn;
-  MessageWriter.call(this, writeFn);
+  console.log("b4writ")
+  MessageWriter.call(this, wSendFn);
   this.wSendFn = this.wSendFn;
 };
 MessageDuplex.prototype = Object.create(MessageWriter.prototype);

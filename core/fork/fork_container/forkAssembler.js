@@ -61,7 +61,7 @@ function checkURIs (j,next){
 
   if(j.url === "headless") return next(void(0),j);
   async.each(windowuri,function(ns,next){
-    j[ns] = url.resolve("http://localhost:3000"+j.tempurl+"/index.html",j[ns]);
+    j[ns] = url.resolve(j.tempurl+"/index.html",j[ns]);
     j.clean[ns] = j[ns];
     var parsed = url.parse(j[ns]);
     if(!url.host){

@@ -20,6 +20,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "docs": "jsdoc -c core/docs/conf.json"
+    "docs": "jsdoc -c core/docs/conf.json",
+    "proxy": "node core/proxy.js"
   }
 }

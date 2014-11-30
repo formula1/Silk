@@ -15,6 +15,7 @@ function FrameContext(manager,winconfig){
   this.id = winconfig.id;
   this.manager = manager;
   this.config = winconfig;
+  console.log(1);
   Object.defineProperty(this,"state",{
     get: function () {
       if(typeof this.frame == "undefined")
@@ -28,7 +29,9 @@ function FrameContext(manager,winconfig){
     }
   });
   WinAbs.call(this);
+  console.log(2);
   this.buildMethods();
+  console.log(3);
 }
 FrameContext.prototype = Object.create(WinAbs.prototype);
 FrameContext.prototype.constructor = FrameContext;

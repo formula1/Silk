@@ -26,7 +26,9 @@ function Server(host,port,path){
   try {
     this.host = "ws://"+host+":"+port;
     this.socket = new WebSocket(this.host);
-    this.socket.onopen = this.onReady.bind(this);
+    this.socket.onopen = function(){
+      that.ready();
+    }
     this.socket.onmessage = function(message){
       try{
         message = JSON.parse(message.data);
@@ -38,7 +40,7 @@ function Server(host,port,path){
     }
     this.socket.onclose = function(){
       console.log('Socket Status: ' + that.socket.readyState + ' (Closed)');
-      that.onNotReady();
+      that.stop();
     };
   } catch (exception) {
     console.log('Error' + exception);
@@ -63,9 +65,10 @@ if(typeof module != "undefined" && module.exports){
 }else{
   window.DocumentHost = null;
   (function(url){
-    url = /^(http[s]?):\/\/([0-9\.]+|[a-z\-.]+)([?::][0-9]+)?([\/][A-Za-z0-9_\-]+)(\?.*)?/.exec(url);
-    console.log(url);
-    window.DocumentHost = new Server(url[2],9999);
-    window.ApplicationFork = new Server(url[2],9999,url[4].substring(1)+"-");
+    url = /^(http[s]?):\/\/([0-9\.]+|[a-z\-.]+)([?::][0-9]+)?([\/][A-Za-z0-9_\-]+)?(\?.*)?/.exec(url);
+    var port = 3000 - url[3].substring(1);
+    window.DocumentHost = new Server(url[2],9999+port);
+    if(url[4])
+      window.ApplicationFork = new Server(url[2],9999+port,url[4].substring(1)+"-");
   })(document.URL)
 }
