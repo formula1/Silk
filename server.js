@@ -1,4 +1,8 @@
 global.__root = __dirname;
+global.hp = process.env.hp || 3000;
+global.wp = process.env.wp || 9999;
+global.sp = process.env.sp || 3500;
+
 var path = require('path');
 
 var express = require('express')
