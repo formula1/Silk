@@ -4,9 +4,9 @@ npm-debug.log
 *.orig
 *.*~
 
-coverage/
-apps/
-window-manager/
+/coverage/
+/apps/
+/window-manager/
 
 #Webstorm
 .idea/
